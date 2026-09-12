@@ -1,0 +1,35 @@
++---------------------------------------------------------------------------------------------------------+
+
+|                                    AWS INFRASTRUCTURE DEPLOYMENT BLUEPRINT                              |
++---------------------------------------------------------------------------------------------------------+
+
+| ENVIRONMENT TYPE    : AWS Free Tier Compliant                                                           |
+| REGION MAP          : us-east-1 (N. Virginia)                                                           |
+| NETWORK SEGMENT A   : Production VPC (10.10.0.0/16)                                                     |
+| NETWORK SEGMENT B   : Corporate VPC  (172.16.0.0/16)                                                    |
++---------------------------------------------------------------------------------------------------------+
+
+[1. ARCHITECTURE INVENTORY & RESOURCE FILES]
+-----------------------------------------------------------------------------------------------------------
+* providers.tf         --> Manages AWS API provider endpoints and version anchors (v5.0+).
+* variables.tf         --> Holds network CIDR sizes and t2.micro compute allocation markers.
+* keypair.tf           --> Registers your native system public RSA key string to AWS.
+* security_groups.tf   --> Controls firewall pathways (Bastion: Port 22 open / App Server: Port 22 internal).
+* vpc.tf               --> Builds your core custom software-defined virtual cloud network boundaries.
+* subnets.tf           --> Subdivides networks into public (10.10.1.0/24) and private (10.10.2.0/24) domains.
+* internet_gateway.tf  --> Provides a bidirectional communications pathway to the public web.
+* route_tables.tf      --> Maps routing table interfaces to route internet traffic via the gateway.
+* vpc_peering.tf       --> Interconnects Production and Corporate networks with zero base charges.
+* vpn_gateway.tf       --> Sets up your virtual infrastructure edge attachment boundary for a secure VPN.
+* customer_gateway.tf  --> Maps your on-prem physical router static public IP address to the cloud.
+* ec2_bastion.tf       --> Spins up your public-facing jump box instance to facilitate secure access.
+* ec2_private_app.tf   --> Provisions your isolated application processing server instance.
+* ebs_volumes.tf       --> Attaches a free 10 GiB gp3 storage block drive directly to your app node.
+
+[2. AWS WEB MANAGEMENT CONSOLE GUI STEPS]
+-----------------------------------------------------------------------------------------------------------
+* STEP A: NETWORKING  --> Create VPC 'prod-vpc' (10.10.0.0/16) -> Subnets -> IGW -> Map routes to 0.0.0.0/0.
+* STEP B: FIREWALLS   --> Generate keypair .pem -> Create Bastion SG (Anywhere) -> Create App SG (Bastion Only).
+* STEP C: COMPUTE     --> Launch Ubuntu t2.micro Bastion -> Launch Private App Instance -> Attach 10 GiB EBS.
+* STEP D: HYBRID LINK --> Build 'corp-vpc' -> Request & Accept VPC Peering -> Provision VPG & Customer Gateway.
++---------------------------------------------------------------------------------------------------------+

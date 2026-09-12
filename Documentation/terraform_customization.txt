@@ -1,0 +1,43 @@
++-----------------------------------------------------------------------------------------------------------------------+
+
+|                                    TERRAFORM ARCHITECTURE VALUE CUSTOMIZATION GUIDE                                   |
++-----------------------------------------------------------------------------------------------------------------------+
+
+| TARGET FILE           | PLACEMARKER STRING / ATTRIBUTE   | WHAT YOU NEED TO CHANGE / CHOOSE                           |
++-----------------------------------------------------------------------------------------------------------------------+
+
+| variables.tf          | default = "us-east-1"            | Change this to your preferred AWS deployment region code.  |
+|                       |                                  | Examples: "us-west-2" (Oregon), "eu-west-1" (Ireland).    |
++-----------------------------------------------------------------------------------------------------------------------+
+
+| variables.tf          | default = "10.10.0.0/16"         | Your production VPC network block range. Safe to leave as   |
+|                       |                                  | default unless it overlaps with another connected network. |
++-----------------------------------------------------------------------------------------------------------------------+
+
+| variables.tf          | default = "172.16.0.0/16"        | The corporate/remote VPC network block range. Ensure this  |
+|                       |                                  | never overlaps with your production VPC range.            |
++-----------------------------------------------------------------------------------------------------------------------+
+
+| keypair.tf            | public_key = "ssh-rsa AAAAB..."  | MUST REPLACE. Delete the example placeholder string and   |
+|                       |                                  | paste the exact contents of your local public key file     |
+|                       |                                  | (usually found inside your local ~/.ssh/id_rsa.pub file).  |
++-----------------------------------------------------------------------------------------------------------------------+
+
+| ec2_bastion.tf        | ami = "ami-0c55b159cbfafe1f0"    | MUST VERIFY/REPLACE. AWS AMI IDs are unique to each region|
+|                       |                                  | Log into your AWS GUI console for your target region, find |
+|                       |                                  | a free-tier Ubuntu image, and copy its fresh 'ami-xxxx' ID.|
++-----------------------------------------------------------------------------------------------------------------------+
+
+| ec2_private_app.tf    | ami = "ami-0c55b159cbfafe1f0"    | MUST MATCH. Update this to the exact same regional Ubuntu  |
+|                       |                                  | AMI ID string that you used inside your 'ec2_bastion.tf'.  |
++-----------------------------------------------------------------------------------------------------------------------+
+
+| customer_gateway.tf   | ip_address = "1.2.3.4"           | MUST REPLACE. Change this placeholder to the actual static |
+|                       |                                  | public IP address routing boundary of your home/office     |
+|                       |                                  | hardware router connection framework.                      |
++-----------------------------------------------------------------------------------------------------------------------+
+
+| security_groups.tf    | cidr_blocks = ["0.0.0.0/0"]      | HIGHLY RECOMMENDED. For the bastion SSH rule, change this  |
+|                       |                                  | from everywhere ("0.0.0.0/0") to your local home network  |
+|                       |                                  | IP address (e.g. "99.23.45.67/32") to lock out intruders.  |
++-----------------------------------------------------------------------------------------------------------------------+
